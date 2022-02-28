@@ -16,6 +16,7 @@ namespace BaltaDataAccess
             using (var connection = new SqlConnection(connectionString))
             {
                 ExecuteProcedure(connection, new Guid("e1bc6798-9941-41ff-bea6-6e204ebfee31"));
+                // StudentBirthdayFunction(connection, "1994-12-01", "1994-12-30");
             }
 
             static void ListCategories(SqlConnection connection)
@@ -111,6 +112,24 @@ namespace BaltaDataAccess
                     commandType: System.Data.CommandType.StoredProcedure);
 
                 Console.WriteLine($"{affectedRows} linhas afetadas");
+            }
+
+            static void StudentBirthdayFunction(SqlConnection connection, String min, String max)
+            {
+                var student = connection.
+                Query("SELECT * FROM DateStudent(@min, @max)",
+                  new
+                  {
+                      min = min,
+                      max = max
+                  }
+                );
+
+                foreach (var item in student)
+                {
+                    Console.WriteLine($"{item.Name} - {item.Id}");
+                }
+
             }
         }
     }
