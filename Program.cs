@@ -15,9 +15,7 @@ namespace BaltaDataAccess
 
             using (var connection = new SqlConnection(connectionString))
             {
-                DeleteCategory(connection);
-
-                ListCategories(connection);
+                GetCategory(connection);
             }
 
             static void ListCategories(SqlConnection connection)
@@ -28,6 +26,20 @@ namespace BaltaDataAccess
                 {
                     Console.WriteLine($"{item.Id} - {item.Title}");
                 }
+            }
+
+            static void GetCategory(SqlConnection connection)
+            {
+                var category = connection
+                    .QueryFirstOrDefault<Category>(
+                        "SELECT TOP 1 [Id], [Title] FROM [Category] WHERE [Id] = @id",
+                    new
+                    {
+                        id = new Guid("09ce0b7b-cfca-497b-92c0-3290ad9d5142")
+                    }
+                );
+
+                Console.WriteLine($"{category.Id} - {category.Title}");
             }
 
             static void CreateCategory(SqlConnection connection)
