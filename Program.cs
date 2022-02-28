@@ -15,7 +15,7 @@ namespace BaltaDataAccess
 
             using (var connection = new SqlConnection(connectionString))
             {
-                GetCategory(connection);
+                ExecuteProcedure(connection, new Guid("e1bc6798-9941-41ff-bea6-6e204ebfee31"));
             }
 
             static void ListCategories(SqlConnection connection)
@@ -99,6 +99,18 @@ namespace BaltaDataAccess
                 });
 
                 Console.WriteLine($"{rows} registro(s) deletado(s)");
+            }
+
+            static void ExecuteProcedure(SqlConnection connection, Guid studentId)
+            {
+                var procedure = "[spDeleteStudent]";
+                var pars = new { StudentId = studentId };
+                var affectedRows = connection.Execute(
+                    procedure,
+                    pars,
+                    commandType: System.Data.CommandType.StoredProcedure);
+
+                Console.WriteLine($"{affectedRows} linhas afetadas");
             }
         }
     }
