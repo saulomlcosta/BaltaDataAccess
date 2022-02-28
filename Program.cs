@@ -15,8 +15,9 @@ namespace BaltaDataAccess
 
             using (var connection = new SqlConnection(connectionString))
             {
-                ExecuteProcedure(connection, new Guid("e1bc6798-9941-41ff-bea6-6e204ebfee31"));
+                // ExecuteProcedure(connection, new Guid("e1bc6798-9941-41ff-bea6-6e204ebfee31"));
                 // StudentBirthdayFunction(connection, "1994-12-01", "1994-12-30");
+                // ExecuteReadProcedure(connection, new Guid("09ce0b7b-cfca-497b-92c0-3290ad9d5142"));
             }
 
             static void ListCategories(SqlConnection connection)
@@ -112,6 +113,21 @@ namespace BaltaDataAccess
                     commandType: System.Data.CommandType.StoredProcedure);
 
                 Console.WriteLine($"{affectedRows} linhas afetadas");
+            }
+
+            static void ExecuteReadProcedure(SqlConnection connection, Guid categoryId)
+            {
+                var procedure = "[spGetCoursesByCategory]";
+                var pars = new { CategoryId = categoryId };
+                var courses = connection.Query(
+                    procedure,
+                    pars,
+                    commandType: System.Data.CommandType.StoredProcedure);
+
+                foreach (var item in courses)
+                {
+                    Console.WriteLine($"{item.Id} - {item.Title}");
+                }
             }
 
             static void StudentBirthdayFunction(SqlConnection connection, String min, String max)
